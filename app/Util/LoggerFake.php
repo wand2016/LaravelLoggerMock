@@ -109,13 +109,6 @@ class LoggerFake implements LoggerInterface
      */
     public function contains($level, $message, array $context = array()): bool
     {
-        $ret = in_array([$message, $context], ($this->repository[$level] ?? []));
-
-        if (!$ret) {
-            var_dump([$message, $context]);
-            var_dump($this->repository[$level] ?? []);
-        }
-
-        return $ret;
+        return in_array([$message, $context], ($this->repository[$level] ?? []));
     }
 }

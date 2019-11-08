@@ -47,7 +47,34 @@ class ExampleTest extends TestCase
      * @test
      * @dataProvider dataProvider_アクセスログの日時
      */
-    public function root_GETでアクセスするとアクセス日時がnoticeでロギングされる_NG(
+    public function root_GETでアクセスするとアクセス日時がnoticeでロギングされる_NG1(
+        Carbon $testNow
+    ) {
+        // ----------------------------------------
+        // 1. setup and expectation
+        // ----------------------------------------
+        Carbon::setTestNow($testNow);
+
+        Log::shouldReceive('notice')
+            ->once()
+            ->with(
+                'アクセス',
+                [
+                    'datetime' => $testNow
+                ]
+            );
+
+        // ----------------------------------------
+        // 2. action
+        // ----------------------------------------
+        $this->get('/');
+    }
+
+    /**
+     * @test
+     * @dataProvider dataProvider_アクセスログの日時
+     */
+    public function root_GETでアクセスするとアクセス日時がnoticeでロギングされる_NG2(
         Carbon $testNow
     ) {
         // ----------------------------------------
