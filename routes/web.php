@@ -8,5 +8,7 @@ use Carbon\Carbon;
 
 $router->get('/', function () {
     Log::notice('アクセス', ['datetime' => Carbon::now()]);
+    Log::notice('なにか別のログ');
+
     return view('welcome');
 });
