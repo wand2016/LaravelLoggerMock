@@ -2,20 +2,55 @@
 
 namespace Tests\Feature;
 
+use App\Util\LoggerFake;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ExampleTest extends TestCase
 {
     /**
-     * A basic test example.
-     *
-     * @return void
+     * @test
+     * @dataProvider dataProvider_アクセスログの日時
      */
-    public function testBasicTest()
-    {
-        $response = $this->get('/');
+    public function root_GETでアクセスするとアクセス日時がnoticeでロギングされる(
+        Carbon $testNow
+    ) {
+        // ----------------------------------------
+        // 1. setup
+        // ----------------------------------------
+        Carbon::setTestNow($testNow);
 
-        $response->assertStatus(200);
+        $loggerFake = new LoggerFake;
+        Log::swap($loggerFake);
+
+        // ----------------------------------------
+        // 2. action
+        // ----------------------------------------
+        $this->get('/');
+
+        // ----------------------------------------
+        // 3. assertion
+        // ----------------------------------------
+        $this->assertTrue(
+            $loggerFake->contains(
+                'notice',
+                'アクセス',
+                [
+                    'datetime' => $testNow
+                ]
+            )
+        );
+    }
+
+    // ----------------------------------------
+    // dataProviders
+    // ----------------------------------------
+
+    public function dataProvider_アクセスログの日時(): iterable
+    {
+        yield [
+            Carbon::create(2019, 12, 7, 23, 59, 59),
+        ];
     }
 }

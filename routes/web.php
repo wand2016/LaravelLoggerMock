@@ -1,16 +1,12 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+use Illuminate\Routing\RouteRegistrar;
+use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 
-Route::get('/', function () {
+/** @var RouteRegistrar $router */
+
+$router->get('/', function () {
+    Log::notice('アクセス', ['datetime' => Carbon::now()]);
     return view('welcome');
 });
